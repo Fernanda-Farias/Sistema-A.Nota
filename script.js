@@ -14,7 +14,6 @@ class Aluno {
 
 // Array e variável auxiliar para armazenar os alunos
 let alunos = [];
-let escola = null;
 
 // Função para adicionar um novo aluno
 function cadastrarAluno() {
@@ -22,20 +21,32 @@ function cadastrarAluno() {
   const matricula = prompt('Digite a matrícula: ');
   const curso = prompt('Digite o curso: ');
   const turma = parseInt(prompt('Digite a turma: '));
-  const notas = parseFloat(prompt('Digite a 1° nota do aluno: '));
+  const primeiraNota = parseFloat(prompt('Digite a 1° nota do aluno: '));
 
-  escola = new Aluno(nome, matricula, curso, turma, [notas]);
-  alunos[length + 1] = escola
-  console.log('Aluno adicionado com sucesso!\n');
+   // Criação do aluno e adição ao array de alunos
+   const novoAluno = new Aluno(nome, matricula, curso, turma, [primeiraNota]);
+   alunos.push(novoAluno);
+   console.log('Aluno adicionado com sucesso!\n');
 }
 
 // Função para exibir a lista de alunos
 function exibirAlunos() {
-  console.log('\nLista de Alunos:');
-  alunos.forEach((aluno, index) => {
-    console.log(`${index + 1}. Nome: ${aluno.nome} \nMatrícula: ${aluno.matricula}, \nCurso: ${aluno.curso}, \nTurma: ${aluno.turma}, \nNotas: [${aluno.notas.join(', ')}]`);
-  });
+    if (alunos.length === 0) {  // Verifica se há alunos no array
+      console.log('Nenhum aluno cadastrado ainda.\n');
+      return;
+    } 
+  
+    console.log('\nLista de Alunos:');
+    alunos.forEach((aluno, index) => {
+      // Acessa e exibe os dados de cada aluno
+      console.log(`${index + 1}. Nome: ${aluno.nome}`);
+      console.log(`Matrícula: ${aluno.matricula}`);
+      console.log(`Curso: ${aluno.curso}`);
+      console.log(`Turma: ${aluno.turma}`);
+      console.log(`Notas: [${aluno.notas.join(', ')}]\n`);
+    });
 }
+  
 
 // Função para adicionar uma nota a um aluno existente
 function adicionarNotaAluno() {
@@ -44,17 +55,49 @@ function adicionarNotaAluno() {
       return;
     }
   
-    exibirAlunos(); // Exibe a lista de alunos para escolha
-    const escolha = parseInt(prompt('Escolha o número do aluno para adicionar uma nova nota: ')) - 1;
+    const matricula = prompt('Digite a matrícula do aluno para adicionar uma nova nota: ');
   
-    if (escolha >= 0 && escolha < alunos.length) {
-      const novaNota = parseFloat(prompt('Digite a nova nota: '));
-      alunos[escolha].adicionarNota(novaNota);
-      console.log('Nota adicionada com sucesso!\n');
-    } else {
-      console.log('Opção inválida. Tente novamente.\n');
+    // Encontrando o aluno pela matrícula
+    const aluno = alunos.find(aluno => aluno.matricula === matricula);
+  
+    // Verificando se o aluno foi encontrado
+    if (!aluno) {
+      console.log('Aluno não encontrado.\n');
+      return;
     }
-  }
+  
+    // Verificando a quantidade de notas do aluno
+    if (aluno.notas.length >= 4) {
+      console.log('O aluno já possui 4 notas cadastradas e não pode adicionar mais.\n');
+    } else {
+      const novaNota = parseFloat(prompt('Digite a nova nota: '));
+      aluno.notas.push(novaNota); // Adiciona a nova nota ao array de notas
+      console.log('\nNota adicionada com sucesso!\n');
+    }
+}
+
+function procurarAluno() {
+    if (alunos.length === 0) {
+      console.log('Nenhum aluno cadastrado ainda.\n');
+      return;
+    }
+    const matricula = prompt('Digite a matrícula do aluno que deseja procurar: ');
+    //for que procura uma matrícula entre as cadastradas igual a matricula digitada pelo usuário
+    let alunoEncontrado = null;
+    for (let i = 0; i < alunos.length; i++) {
+      if (alunos[i].matricula === matricula) {
+        alunoEncontrado = alunos[i];
+        break; // Interrompe o loop quando o aluno é encontrado
+      }
+    }
+  
+    // Verifica se o aluno foi encontrado
+    if (alunoEncontrado) {
+      console.log(`\nDados do Aluno:\nNome: ${alunoEncontrado.nome}\nMatrícula: ${alunoEncontrado.matricula}\nCurso: ${alunoEncontrado.curso}\nTurma: ${alunoEncontrado.turma}\nNotas: [${alunoEncontrado.notas.join(', ')}]\n`);
+    } else {
+      console.log('Aluno com a matrícula informada não foi encontrado.\n');
+    }
+}
 
 // Função principal para exibir o menu
 function menu() {
@@ -64,14 +107,15 @@ function menu() {
   console.log('\n3- Adicionar Nota');
   console.log('\n4- Editar Nota');
   console.log('\n5- Remover aluno');
-  console.log('\n6- Filtrar Por Nota');
+  console.log('\n6- Procurar aluno');
   console.log('\n7- Sair');
 }
 
+let escolha;
 // Condição de escolha do usuário
 do {
   menu();
-  const escolha = parseInt(prompt('Escolha a opção desejada: '));
+  escolha = parseInt(prompt('\nEscolha a opção desejada: '));
 
   switch (escolha) {
     case 1:
@@ -82,6 +126,9 @@ do {
       break;
     case 3:
       adicionarNotaAluno();
+      break;
+    case 6:
+      procurarAluno()
       break;
     case 7:
         console.log("Obrigada por usar o A.Nota!")
