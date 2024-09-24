@@ -8,8 +8,8 @@
         <li>Conter Menu.</li>
         <li>Uso de Array.</li>
         <li>Trabalhar com Classes e Objetos.</li>
-        <li>Conter mecanismos de CRUD (Create, Read, Update e Delete)</li>
-        <li>Conter Filtro</li>
+        <li>Conter mecanismos de CRUD (Create, Read, Update e Delete).</li>
+        <li>Conter Filtro.</li>
     </ul>
 </h4>
 
@@ -19,7 +19,7 @@
         <br><li>Cadastrar Alunos.</li>
         <li>Exibir Alunos Cadastrados.</li>
         <li>Adicionar Outra Nota a um Aluno já Existente.</li>
-        <li>Editar a Nota de um Aluno</li>
+        <li>Editar a Nota de um Aluno.</li>
         <li>Remover um Aluno.</li>
         <li>Filtrar por Nota.</li>
     </ul>
