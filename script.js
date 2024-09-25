@@ -8,12 +8,31 @@ class Aluno {
     this.matricula = matricula;
     this.curso = curso;
     this.turma = turma;
-    this.nota = notas;
+    this.notas = notas;
   }
 }
 
-// Array e variável auxiliar para armazenar os alunos
+// Array para armazenar os alunos
 let alunos = [];
+
+// Função para validar se há alunos cadastrados
+function validarAlunos() {
+  if (alunos === undefined || alunos.length === 0) {
+    console.log('Nenhum aluno cadastrado ainda.\n');
+    return false;
+  }
+  return true; // Retorna true se tiver alunos cadastrados para a função seguinte continuar executando
+}
+
+// Função para encontrar um aluno pela matrícula
+function encontrarAlunoPorMatricula(matricula) {
+  for (let i = 0; i < alunos.length; i++) {
+    if (alunos[i].matricula === matricula) {
+      return alunos[i];
+    }
+  }
+  return null; // Retorna null se o aluno não for encontrado
+}
 
 // Função para adicionar um novo aluno
 function cadastrarAluno() {
@@ -23,96 +42,194 @@ function cadastrarAluno() {
   const turma = parseInt(prompt('Digite a turma: '));
   const primeiraNota = parseFloat(prompt('Digite a 1° nota do aluno: '));
 
-   // Criação do aluno e adição ao array de alunos
-   const novoAluno = new Aluno(nome, matricula, curso, turma, [primeiraNota]);
-   alunos.push(novoAluno);
-   console.log('Aluno adicionado com sucesso!\n');
+  const novoAluno = new Aluno(nome, matricula, curso, turma, [primeiraNota]);
+  alunos[alunos.length] = novoAluno;
+  console.log('Aluno adicionado com sucesso!\n');
 }
 
-// Função para exibir a lista de alunos
+// Função para exibir a lista de alunos cadastrados
 function exibirAlunos() {
-    if (alunos.length === 0) {  // Verifica se há alunos no array
-      console.log('Nenhum aluno cadastrado ainda.\n');
-      return;
-    } 
-  
-    console.log('\nLista de Alunos:');
-    alunos.forEach((aluno, index) => {
-      // Acessa e exibe os dados de cada aluno
-      console.log(`${index + 1}. Nome: ${aluno.nome}`);
-      console.log(`Matrícula: ${aluno.matricula}`);
-      console.log(`Curso: ${aluno.curso}`);
-      console.log(`Turma: ${aluno.turma}`);
-      console.log(`Notas: [${aluno.notas.join(', ')}]\n`);
-    });
+  if (!validarAlunos()) return;
+
+  console.log('\nLista de Alunos:');
+  for (let i = 0; i < alunos.length; i++) {
+    const aluno = alunos[i];
+    console.log(`${i + 1}. Nome: ${aluno.nome}`);
+    console.log(`Matrícula: ${aluno.matricula}`);
+    console.log(`Curso: ${aluno.curso}`);
+    console.log(`Turma: ${aluno.turma}`);
+
+    // Cocatenando as notas do aluno para exibi-las
+    let notasJuntas = '';
+    for (let i = 0; i < aluno.notas.length; i++) {
+      notasJuntas += aluno.notas[i];
+      if (i < aluno.notas.length - 1) {
+        notasJuntas += ', ';
+      }
+    }
+
+    console.log(`Notas: ${notasJuntas}\n`);
+  }
 }
-  
+
+
+// Função para procurar um aluno pela matrícula
+function procurarAluno() {
+  if (!validarAlunos()) return;
+
+  const matricula = prompt('Digite a matrícula do aluno que deseja procurar: ');
+  const aluno = encontrarAlunoPorMatricula(matricula);
+
+  if (aluno) {
+    // Cocatenando as notas do aluno para exibi-las
+    let notasJuntas = '';
+    for (let i = 0; i < aluno.notas.length; i++) {
+      notasJuntas += aluno.notas[i];
+      if (i < aluno.notas.length - 1) {
+        notasJuntas += ', ';
+      }
+    }
+
+    console.log(`\nDados do Aluno:\nNome: ${aluno.nome}\nMatrícula: ${aluno.matricula}\nCurso: ${aluno.curso}\nTurma: ${aluno.turma}\nNotas: [${notasJuntas}]\n`);
+  } else {
+    console.log('Aluno com a matrícula informada não foi encontrado.\n');
+  }
+}
+
+// Função para atualizar os dados de um aluno existente
+function atualizarDadosAluno() {
+  if (!validarAlunos()) return;
+
+  const matricula = prompt('Digite a matrícula do aluno para atualizar os dados: ');
+  const aluno = encontrarAlunoPorMatricula(matricula);
+
+  if (!aluno) {
+    console.log('Aluno não encontrado.\n');
+    return;
+  }
+
+  const novoNome = prompt(`Digite o novo nome do aluno (atual: ${aluno.nome}): `);
+  const novoCurso = prompt(`Digite o novo curso do aluno (atual: ${aluno.curso}): `);
+  const novaTurma = parseInt(prompt(`Digite a nova turma do aluno (atual: ${aluno.turma}): `));
+
+  // Verifica se o novo nome é uma string válida
+  aluno.nome = novoNome || aluno.nome;
+  // Verifica se o novo curso é uma string válida
+  aluno.curso = novoCurso || aluno.curso;
+  // Verifica se a nova turma é um número válido
+  aluno.turma = isNaN(novaTurma) ? aluno.turma : novaTurma;
+
+  console.log('Dados do aluno atualizados com sucesso!\n');
+}
+
+// Função para remover um aluno pela matrícula
+function removerAluno() {
+  if (!validarAlunos()) return;
+
+  const matricula = prompt('Digite a matrícula do aluno que deseja remover: ');
+  let indiceAluno = -1; 
+
+  // Encontrar o índice do aluno
+  for (let i = 0; i < alunos.length; i++) {
+    if (alunos[i].matricula === matricula) {
+      indiceAluno = i;
+      break;
+    }
+  }
+
+  if (indiceAluno === -1) {
+    console.log('Aluno não encontrado.\n');
+    return;
+  }
+
+  // Remover o aluno recriando o array sem o aluno a ser removido
+  const novosAlunos = [];
+  for (let i = 0; i < alunos.length; i++) {
+    if (i !== indiceAluno) {
+      novosAlunos[novosAlunos.length] = alunos[i];
+    }
+  }
+
+  alunos = novosAlunos;
+  console.log('Aluno removido com sucesso!\n');
+}
 
 // Função para adicionar uma nota a um aluno existente
 function adicionarNotaAluno() {
-    if (alunos.length === 0) {
-      console.log('Nenhum aluno cadastrado ainda.\n');
-      return;
-    }
-  
-    const matricula = prompt('Digite a matrícula do aluno para adicionar uma nova nota: ');
-  
-    // Encontrando o aluno pela matrícula
-    const aluno = alunos.find(aluno => aluno.matricula === matricula);
-  
-    // Verificando se o aluno foi encontrado
-    if (!aluno) {
-      console.log('Aluno não encontrado.\n');
-      return;
-    }
-  
-    // Verificando a quantidade de notas do aluno
-    if (aluno.notas.length >= 4) {
-      console.log('O aluno já possui 4 notas cadastradas e não pode adicionar mais.\n');
-    } else {
-      const novaNota = parseFloat(prompt('Digite a nova nota: '));
-      aluno.notas.push(novaNota); // Adiciona a nova nota ao array de notas
-      console.log('\nNota adicionada com sucesso!\n');
-    }
+  if (!validarAlunos()) return;
+
+  const matricula = prompt('Digite a matrícula do aluno para adicionar uma nova nota: ');
+  const aluno = encontrarAlunoPorMatricula(matricula);
+
+  if (!aluno) {
+    console.log('Aluno não encontrado.\n');
+    return;
+  }
+
+  if (aluno.notas.length >= 4) {
+    console.log('O aluno já possui o máximo de notas permitidas.\n');
+  } else {
+    const novaNota = parseFloat(prompt('Digite a nova nota: '));
+    aluno.notas[aluno.notas.length] = novaNota;
+    console.log('\nNota adicionada com sucesso!\n');
+  }
 }
 
-function procurarAluno() {
-    if (alunos.length === 0) {
-      console.log('Nenhum aluno cadastrado ainda.\n');
-      return;
+// Função para editar uma nota de um aluno existente
+function editarNotaAluno() {
+  if (!validarAlunos()) return;
+
+  const matricula = prompt('Digite a matrícula do aluno para editar uma nota: ');
+  const aluno = encontrarAlunoPorMatricula(matricula);
+
+  if (!aluno) {
+    console.log('Aluno não encontrado.\n');
+    return;
+  }
+
+  if (aluno.notas.length === 0) {
+    console.log('O aluno não possui notas para editar.\n');
+    return;
+  }
+
+  // Cocatenando as notas do aluno para exibi-las
+  let notasJuntas = '';
+  for (let i = 0; i < aluno.notas.length; i++) {
+    notasJuntas += aluno.notas[i];
+    if (i < aluno.notas.length - 1) {
+      notasJuntas += ', ';
     }
-    const matricula = prompt('Digite a matrícula do aluno que deseja procurar: ');
-    //for que procura uma matrícula entre as cadastradas igual a matricula digitada pelo usuário
-    let alunoEncontrado = null;
-    for (let i = 0; i < alunos.length; i++) {
-      if (alunos[i].matricula === matricula) {
-        alunoEncontrado = alunos[i];
-        break; // Interrompe o loop quando o aluno é encontrado
-      }
-    }
-  
-    // Verifica se o aluno foi encontrado
-    if (alunoEncontrado) {
-      console.log(`\nDados do Aluno:\nNome: ${alunoEncontrado.nome}\nMatrícula: ${alunoEncontrado.matricula}\nCurso: ${alunoEncontrado.curso}\nTurma: ${alunoEncontrado.turma}\nNotas: [${alunoEncontrado.notas.join(', ')}]\n`);
-    } else {
-      console.log('Aluno com a matrícula informada não foi encontrado.\n');
-    }
+  }
+
+  console.log(`Notas atuais: [${notasJuntas}]`);
+  const indiceNota = parseInt(prompt('Digite o índice da nota que deseja editar (começando de 1): ')) - 1;
+
+  if (indiceNota < 0 || indiceNota >= aluno.notas.length) {
+    console.log('Índice de nota inválido.\n');
+    return;
+  }
+
+  const novaNota = parseFloat(prompt('Digite a nova nota: '));
+  aluno.notas[indiceNota] = novaNota;
+  console.log('Nota editada com sucesso!\n');
 }
 
-// Função principal para exibir o menu
+// Função de menu
 function menu() {
-  console.log('\n--- Bem-vindo(a) ao Sistema A.Nota, o Sistema de Notas dos Alunos! ---');
-  console.log('\n1- Cadastrar Aluno');
-  console.log('\n2- Exibir Alunos');
-  console.log('\n3- Adicionar Nota');
-  console.log('\n4- Editar Nota');
-  console.log('\n5- Remover aluno');
-  console.log('\n6- Procurar aluno');
-  console.log('\n7- Sair');
+  console.log('\nMenu de Opções\n');
+  console.log('1. Cadastrar Aluno');
+  console.log('2. Exibir Alunos');
+  console.log('3. Procurar Aluno');
+  console.log('4. Atualizar Dados do Aluno');
+  console.log('5. Remover Aluno');
+  console.log('6. Adicionar Nota ao Aluno');
+  console.log('7. Editar Nota do Aluno');
+  console.log('8. Sair');
 }
 
 let escolha;
-// Condição de escolha do usuário
+console.log('Seja Bem-Vindo(a) ao Sistema A.Nota!');
+// do while que complementa o Menu, executando as funções desejadas
 do {
   menu();
   escolha = parseInt(prompt('\nEscolha a opção desejada: '));
@@ -125,15 +242,25 @@ do {
       exibirAlunos();
       break;
     case 3:
-      adicionarNotaAluno();
+      procurarAluno();
+      break;
+    case 4:
+      atualizarDadosAluno();
+      break;
+    case 5:
+      removerAluno();
       break;
     case 6:
-      procurarAluno()
+      adicionarNotaAluno();
       break;
     case 7:
-        console.log("Obrigada por usar o A.Nota!")
+      editarNotaAluno();
+      break;
+    case 8:
+      console.log('Obrigado(a) por usar o Sistema A.Nota!');
       break;
     default:
-      console.log('Opção inválida, tente novamente.');
+      console.log('Opção inválida. Tente novamente.\n');
+      break;
   }
-} while (escolha != 7)
+} while (escolha != 8);
