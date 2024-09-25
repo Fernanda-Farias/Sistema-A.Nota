@@ -1,4 +1,4 @@
-<h1> A.Nota - Um Sistema de Notas de Alunos.</h1>
+<h1> A.Nota - Um Programa de Notas de Alunos.</h1>
 <h4>O A.Nota é um pequeno programa construído em Javascript, exigido para a aprovação na disciplina de Algoritmo e Programação no curso Tecnólogo em Análise e Desenvolvimento de Sistemas do IFPI - Campus Parnaíba. O programa busca simular um pequeno sistema de administração de alunos e suas notas.</h4>
 
 <h2>Sobre o Desenvolvimento</h2>
