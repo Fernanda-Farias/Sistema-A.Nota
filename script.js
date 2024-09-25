@@ -39,7 +39,7 @@ function cadastrarAluno() {
   const nome = prompt('Digite o nome do aluno: ');
   const matricula = prompt('Digite a matrícula: ');
   const curso = prompt('Digite o curso: ');
-  const turma = parseInt(prompt('Digite a turma: '));
+  const turma = prompt('Digite a turma: ');
   const primeiraNota = parseFloat(prompt('Digite a 1° nota do aluno: '));
 
   const novoAluno = new Aluno(nome, matricula, curso, turma, [primeiraNota]);
@@ -110,14 +110,14 @@ function atualizarDadosAluno() {
 
   const novoNome = prompt(`Digite o novo nome do aluno (atual: ${aluno.nome}): `);
   const novoCurso = prompt(`Digite o novo curso do aluno (atual: ${aluno.curso}): `);
-  const novaTurma = parseInt(prompt(`Digite a nova turma do aluno (atual: ${aluno.turma}): `));
+  const novaTurma = prompt(`Digite a nova turma do aluno (atual: ${aluno.turma}): `);
 
   // Verifica se o novo nome é uma string válida
   aluno.nome = novoNome || aluno.nome;
   // Verifica se o novo curso é uma string válida
   aluno.curso = novoCurso || aluno.curso;
-  // Verifica se a nova turma é um número válido
-  aluno.turma = isNaN(novaTurma) ? aluno.turma : novaTurma;
+  // Verifica se a nova turma é uma string válida
+  aluno.turma = novaTurma || aluno.turma;
 
   console.log('Dados do aluno atualizados com sucesso!\n');
 }
