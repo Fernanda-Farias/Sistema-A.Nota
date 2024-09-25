@@ -16,11 +16,12 @@
 <h2>Funcionalidades</h2>
 <h4>O programa foi desenvolvido de forma que sejam possíveis as seguintes funcionalidades:
     <ul>
-        <br><li>Cadastrar Alunos.</li>
-        <li>Exibir Alunos Cadastrados.</li>
-        <li>Adicionar Outra Nota a um Aluno já Existente.</li>
-        <li>Editar a Nota de um Aluno.</li>
-        <li>Remover um Aluno.</li>
-        <li>Filtrar por Nota.</li>
+        <br><li>Cadastrar Aluno.</li>
+        <li>Exibir Alunos.</li>
+        <li>Procurar Aluno.</li>
+        <li>Atualizar Dados do Aluno.</li>
+        <li>Remover Aluno.</li>
+        <li>Adicionar Nota ao Aluno.</li>
+        <li>Editar Nota do Aluno.</li>
     </ul>
 </h4>
